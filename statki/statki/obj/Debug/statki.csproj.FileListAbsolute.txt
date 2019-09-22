@@ -1,0 +1,7 @@
+C:\Users\Wojtek\source\repos\statki\statki\bin\Debug\statki.exe.config
+C:\Users\Wojtek\source\repos\statki\statki\bin\Debug\statki.exe
+C:\Users\Wojtek\source\repos\statki\statki\bin\Debug\statki.pdb
+C:\Users\Wojtek\source\repos\statki\statki\obj\Debug\statki.csprojAssemblyReference.cache
+C:\Users\Wojtek\source\repos\statki\statki\obj\Debug\statki.csproj.CoreCompileInputs.cache
+C:\Users\Wojtek\source\repos\statki\statki\obj\Debug\statki.exe
+C:\Users\Wojtek\source\repos\statki\statki\obj\Debug\statki.pdb

@@ -39,6 +39,7 @@ namespace statki
             }
             Console.ReadLine();
         }
+
         public static void RefreshScreen(PlayerBoard playerBoard, EnemyBoard enemyBoard)
         {
             Console.Clear();

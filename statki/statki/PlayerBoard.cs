@@ -32,7 +32,7 @@ namespace statki
             }
             else
             {
-                var coord = Coord.CreateNewCoord(shipSize, "");
+                var coord = Coord.CreateNewCoord(this, shipSize, "");
                 AllShips.Add(new Ship(coord, this));
             }
         }

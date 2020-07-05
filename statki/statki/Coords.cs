@@ -9,6 +9,7 @@ namespace statki
 {
     public class Coord
     {
+        public Coord() { }
         public Coord(string coordinate)
         {
             Letter = (int)coordinate[0] - 64;
@@ -17,6 +18,7 @@ namespace statki
             else
                 Number = Convert.ToInt32(coordinate[1]) - 48;
         }
+
         public int Letter { get; set; }
         public int Number { get; set; }
         public static bool ClassyCellCordsAreIncorrect(string coordinate)
@@ -28,17 +30,19 @@ namespace statki
                      || coordinate.Length == 3 && coordinate[2] != '0';
         }
 
-        public static Coord CreateNewCoord(int shipSize, string endOfShip)
+        public static Coord CreateNewCoord(Board board, int shipSize, string endOfShip)
         {
+            Coord result;
             string coordinate;
             do
             {
                 Console.Write($"Podaj poprawna współrzędną {endOfShip} {shipSize}-polowego statku: ");
                 coordinate = Console.ReadLine().ToUpper();
+                result = new Coord(coordinate);
             }
-            while (ClassyCellCordsAreIncorrect(coordinate));
+            while (ClassyCellCordsAreIncorrect(coordinate) && result.CellIsAvailable(board));
 
-            return new Coord(coordinate);
+            return result;
         }
 
         public bool CellIsAvailable(Board board)
@@ -75,10 +79,10 @@ namespace statki
 
     public class DoubleCoord
     {
-        public DoubleCoord(int shipSize)
+        public DoubleCoord(Board board, int shipSize)
         {
-            First = Coord.CreateNewCoord(shipSize, "początku");
-            Second = Coord.CreateNewCoord(shipSize, "końca");
+            First = Coord.CreateNewCoord(board, shipSize, "początku");
+            Second = Coord.CreateNewCoord(board, shipSize, "końca");
         }
         public Coord First { get; set; }
         public Coord Second { get; set; }
@@ -88,16 +92,11 @@ namespace statki
             DoubleCoord result;
             do
             {
-                result = new DoubleCoord(shipSize);
+                result = new DoubleCoord(board, shipSize);
             }
-            while (!(result.BothCellsAreAvailable(board) && result.CellsNotIdentical() && result.CorrectDistanceBetweenCoords(shipSize)));
+            while (!(result.CellsNotIdentical() && result.CorrectDistanceBetweenCoords(shipSize)));
 
             return result;
-        }
-
-        private bool BothCellsAreAvailable(Board board)
-        {
-            return First.CellIsAvailable(board) && Second.CellIsAvailable(board);
         }
 
         private bool CellsNotIdentical()

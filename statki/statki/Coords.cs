@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using static statki.DataModels;
@@ -21,14 +22,6 @@ namespace statki
 
         public int Letter { get; set; }
         public int Number { get; set; }
-        public static bool ClassyCellCordsAreIncorrect(string coordinate)
-        {
-            return string.IsNullOrEmpty(coordinate)
-                     || coordinate.Length < 2 || coordinate.Length > 3
-                     || (!DataModels.PermissibleLetters.Contains(coordinate[0].ToString()))
-                     || !DataModels.PermissibleNumbers.Contains(coordinate[1].ToString())
-                     || coordinate.Length == 3 && coordinate[2] != '0';
-        }
 
         public static Coord CreateNewCoord(Board board, int shipSize, string endOfShip)
         {
@@ -40,9 +33,18 @@ namespace statki
                 coordinate = Console.ReadLine().ToUpper();
                 result = new Coord(coordinate);
             }
-            while (ClassyCellCordsAreIncorrect(coordinate) && result.CellIsAvailable(board));
+            while (!IsCoordCorrect(coordinate) && result.CellIsAvailable(board));
 
             return result;
+        }
+
+        public static bool IsCoordCorrect(string coordinate)
+        {
+            return !string.IsNullOrEmpty(coordinate)
+                     || coordinate.Length >= 2 && coordinate.Length <= 3
+                     || (DataModels.PermissibleLetters.Contains(coordinate[0].ToString()))
+                     || DataModels.PermissibleNumbers.Contains(coordinate[1].ToString())
+                     || coordinate.Length == 3 && coordinate[1] == '1' && coordinate[2] == '0';
         }
 
         public bool CellIsAvailable(Board board)
@@ -74,6 +76,19 @@ namespace statki
         public static bool operator != (Coord c1, Coord c2)
         {
             return !(c1 == c2);
+        }
+
+        public override bool Equals (Object obj)
+        {
+            if (obj == null || !(obj is Coord))
+                return false;
+
+            return this == (Coord)obj;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 

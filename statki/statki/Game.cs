@@ -17,30 +17,28 @@ namespace statki
             Console.WriteLine("Witaj w grze w statki!");
             playerBoard.CreateFleet();
             enemyBoard.CreateFleet();
-            bool gameOver;
 
             do
             {
-                RefreshScreen(playerBoard, enemyBoard);
+                RedrawBoards(playerBoard, enemyBoard);
                 Console.ReadLine();
                 PlayersShoot(playerBoard, enemyBoard);
-                gameOver = CheckIfGameIsOver(playerBoard, enemyBoard);
-            } while (!gameOver);
+            } while (!IsGameOver(playerBoard, enemyBoard));
 
             if (playerBoard.LostAllFleet())
             {
-                RefreshScreen(playerBoard, enemyBoard);
+                RedrawBoards(playerBoard, enemyBoard);
                 Console.Write("Przegrałeś!");
             }
             else
             {
-                RefreshScreen(playerBoard, enemyBoard);
+                RedrawBoards(playerBoard, enemyBoard);
                 Console.Write("Wygrałeś!");
             }
             Console.ReadLine();
         }
 
-        public static void RefreshScreen(PlayerBoard playerBoard, EnemyBoard enemyBoard)
+        public static void RedrawBoards(PlayerBoard playerBoard, EnemyBoard enemyBoard)
         {
             Console.Clear();
             playerBoard.DrawBoard();
@@ -53,12 +51,9 @@ namespace statki
             enemyBoard.ShootEnemy(enemyBoard);
         }
 
-        public static bool CheckIfGameIsOver(PlayerBoard playerBoard, EnemyBoard enemyBoard)
+        public static bool IsGameOver(PlayerBoard playerBoard, EnemyBoard enemyBoard)
         {
-            if (playerBoard.LostAllFleet() || enemyBoard.LostAllFleet())
-                return true;
-
-            return false;
+            return playerBoard.LostAllFleet() || enemyBoard.LostAllFleet();
         }
     }
 }

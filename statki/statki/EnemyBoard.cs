@@ -82,37 +82,30 @@ namespace statki
 
         public bool ChooseCellToShoot(Board board)
         {
-            string coordinate;
+            string userInput;
             do
             {
                 Console.Write("Podaj prawidłową współrzędna do strzału: ");
-                coordinate = Console.ReadLine().ToUpper();
+                userInput = Console.ReadLine().ToUpper();
             }
-            while (CellCordsAreIncorrect(coordinate));
+            while (Coord.IsCoordCorrect(userInput));
 
-            int coordinateNumber;
-            int coordinateLetter = (int)coordinate[0] - 64;
-            if (coordinate.Length == 3)
-                coordinateNumber = 10;
-            else
-                coordinateNumber = coordinate[1] - 48;
-
-            return DidShotHit(coordinateLetter, coordinateNumber, board);
+            return DidShotHit(new Coord(userInput), board);
         }
 
-        private bool DidShotHit(int coordinateLetter, int coordinateNumber, Board board)
+        private bool DidShotHit(Coord coordinate, Board board)
         {
-            switch (BoardContent[coordinateLetter, coordinateNumber])
+            switch (BoardContent[coordinate.Letter, coordinate.Number])
             {
                 case CellContent.empty:
-                    BoardContent[coordinateLetter, coordinateNumber] = CellContent.missedShot;
+                    BoardContent[coordinate.Letter, coordinate.Number] = CellContent.missedShot;
                     Console.Clear();
                     DrawBoard();
                     Console.Write("Pudło!");
                     return false;
 
                 case CellContent.ship:
-                    if (CheckIfShootSinkTheShip(board, coordinateLetter, coordinateNumber))
+                    if (CheckIfShootSinkTheShip(board, coordinate.Letter, coordinate.Number))
                     {
                         Console.Clear();
                         DrawBoard();

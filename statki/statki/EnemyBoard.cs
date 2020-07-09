@@ -105,7 +105,7 @@ namespace statki
                     return false;
 
                 case CellContent.ship:
-                    if (CheckIfShootSinkTheShip(board, coordinate.Letter, coordinate.Number))
+                    if (CheckIfShootSinkTheShip(board, coordinate))
                     {
                         Console.Clear();
                         DrawBoard();

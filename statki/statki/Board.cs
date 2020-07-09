@@ -23,30 +23,25 @@ namespace statki
 
         public bool LostAllFleet()
         {
-            return !StillHaveFleet();
-        }
-
-        private bool StillHaveFleet()
-        {
             for (int row = 1; row < BoardSize; row++)
             {
                 for (int column = 1; column < BoardSize; column++)
                 {
                     if (this.BoardContent[row, column] == CellContent.ship)
-                        return true;
+                        return false;
                 }
             }
-            return false;
+            return true;
         }
 
-        public bool CheckIfShootSinkTheShip(Board board, int coordinateLetter, int coordinateNumber)
+        public bool CheckIfShootSinkTheShip(Board board, Coord coord)
         {
             bool correctShip = false;
             foreach (Ship ship in AllShips)
             {
                 foreach (Part p in ship.Body)
                 {
-                    if (p.CoordLetter == coordinateLetter && p.CoordNumber == coordinateNumber)
+                    if (p.Coord == coord)
                     {
                         correctShip = true;
                         p.ShipPart = CellContent.hitShip;

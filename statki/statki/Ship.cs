@@ -11,9 +11,8 @@ namespace statki
     {
         public class Part
         {
-            public CellContent ShipPart;
-            public int CoordLetter;
-            public int CoordNumber;
+            public CellContent ShipPart { get; set; }
+            public Coord Coord { get; set; }
         }
 
         public List<Part> Body;
@@ -25,8 +24,7 @@ namespace statki
                 new Part
                 {
                     ShipPart = CellContent.ship,
-                    CoordLetter = coord.Letter,
-                    CoordNumber = coord.Number
+                    Coord = coord
                 }
             };
 
@@ -46,8 +44,7 @@ namespace statki
                     Body.Add(new Part
                     {
                         ShipPart = CellContent.ship,
-                        CoordLetter = row,
-                        CoordNumber = column
+                        Coord = {Letter = row, Number = column}
                     });
                 }
             }
@@ -88,8 +85,7 @@ namespace statki
                     Body.Add(new Part
                     {
                         ShipPart = CellContent.ship,
-                        CoordLetter = row,
-                        CoordNumber = column
+                        Coord = { Letter = row, Number = column }
                     });
                 }
             UpdateShipOnBoard(board);
@@ -120,7 +116,7 @@ namespace statki
         {
             foreach (var part in Body)
             {
-                board.BoardContent[part.CoordLetter, part.CoordNumber] = part.ShipPart;
+                board.BoardContent[part.Coord.Letter, part.Coord.Number] = part.ShipPart;
             }
         }
 

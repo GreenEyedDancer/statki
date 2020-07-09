@@ -99,21 +99,21 @@ namespace statki
 
         public bool EnemyChooseCellToShoot(Board board)
         {
-            int coordinateLetter, coordinateNumber;
+            var coord = new Coord();
             do
             {
-                coordinateNumber = RandomCoordinate.Next(10) + 1;
-                coordinateLetter = RandomCoordinate.Next(10) + 1;
-                switch (BoardContent[coordinateLetter, coordinateNumber])
+                coord.Number = RandomCoordinate.Next(10) + 1;
+                coord.Letter = RandomCoordinate.Next(10) + 1;
+                switch (BoardContent[coord.Letter, coord.Number])
                 {
                     case CellContent.empty:
-                        BoardContent[coordinateLetter, coordinateNumber] = CellContent.missedShot;
+                        BoardContent[coord.Letter, coord.Number] = CellContent.missedShot;
                         Console.Clear();
                         DrawBoard();
                         Console.Write("Pudło!");
                         return false;
                     case CellContent.ship:
-                        if (CheckIfShootSinkTheShip(board, coordinateLetter, coordinateNumber))
+                        if (CheckIfShootSinkTheShip(board, coord))
                         {
                             Console.Clear();
                             DrawBoard();

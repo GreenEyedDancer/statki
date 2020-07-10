@@ -25,26 +25,49 @@ namespace statki
 
         public static Coord CreateNewCoord(Board board, int shipSize, string endOfShip)
         {
-            Coord result;
+            Coord result = new Coord();
             string coordinate;
             do
             {
                 Console.Write($"Podaj poprawna współrzędną {endOfShip} {shipSize}-polowego statku: ");
                 coordinate = Console.ReadLine().ToUpper();
+                if (!IsCoordCorrect(coordinate))
+                {
+                    continue;
+                }
+
                 result = new Coord(coordinate);
             }
-            while (!IsCoordCorrect(coordinate) && result.CellIsAvailable(board));
+            while (!result.CellIsAvailable(board));
 
             return result;
         }
 
         public static bool IsCoordCorrect(string coordinate)
         {
-            return !string.IsNullOrEmpty(coordinate)
-                     || coordinate.Length >= 2 && coordinate.Length <= 3
-                     || (DataModels.PermissibleLetters.Contains(coordinate[0].ToString()))
-                     || DataModels.PermissibleNumbers.Contains(coordinate[1].ToString())
-                     || coordinate.Length == 3 && coordinate[1] == '1' && coordinate[2] == '0';
+            return IsNotEmpty(coordinate)
+                && HasCorrectLetter(coordinate)
+                && (HasCorrectOneDigitNumber(coordinate) || HasCorrectTwoDigitNumber(coordinate));
+        }
+
+        public static bool IsNotEmpty(string toCheck)
+        {
+            return !string.IsNullOrEmpty(toCheck);
+        }
+
+        public static bool HasCorrectLetter(string toCheck)
+        {
+            return DataModels.PermissibleLetters.Contains(toCheck[0].ToString());
+        }
+
+        public static bool HasCorrectOneDigitNumber(string toCheck)
+        {
+            return toCheck.Length == 2 && DataModels.PermissibleNumbers.Contains(toCheck[1].ToString());
+        }
+
+        public static bool HasCorrectTwoDigitNumber(string toCheck)
+        {
+            return toCheck.Length == 3 && toCheck[1] == '1' && toCheck[2] == '0';
         }
 
         public bool CellIsAvailable(Board board)

@@ -44,7 +44,7 @@ namespace statki
                     Body.Add(new Part
                     {
                         ShipPart = CellContent.ship,
-                        Coord = {Letter = row, Number = column}
+                        Coord = new Coord { Letter = row, Number = column}
                     });
                 }
             }
@@ -55,40 +55,67 @@ namespace statki
         public Ship(int shipSize, Board board)
         {
             Body = new List<Part>();
-            int firstCoordLetter, secondCoordLetter,
-                firstCoordNumber, secondCoordNumber;
+            var Coord1 = new Coord();
+            var Coord2 = new Coord();
+
             do
             {
                 do
                 {
-                    firstCoordLetter = RandomCoordinate.Next(10) + 1;
-                    firstCoordNumber = RandomCoordinate.Next(10) + 1;
-                } while (!CellIsAvailable(firstCoordLetter, firstCoordNumber, board));
+                    Coord1.Letter =  RandomCoordinate.Next(10) + 1;
+                    Coord1.Number = RandomCoordinate.Next(10) + 1;
+                } while (!CellIsAvailable(Coord1, board));
 
-                secondCoordNumber = firstCoordNumber;
-                secondCoordLetter = firstCoordLetter;
+                Coord2.Number = Coord1.Number;
+                Coord2.Letter = Coord1.Letter;
 
-                if (CellIsAvailable(firstCoordLetter + shipSize - 1, firstCoordNumber, board))
-                    secondCoordLetter = firstCoordLetter + shipSize - 1;
-                else if (CellIsAvailable(firstCoordLetter, firstCoordNumber + shipSize - 1, board))
-                    secondCoordNumber = firstCoordNumber + shipSize - 1;
-                else if (CellIsAvailable(firstCoordLetter, firstCoordNumber - shipSize + 1, board))
-                    secondCoordNumber = firstCoordNumber - shipSize + 1;
+                if (CellIsAvailable(Coord1.Letter + shipSize - 1, Coord1.Number, board))
+                    Coord2.Letter = Coord1.Letter + shipSize - 1;
+                else if (CellIsAvailable(Coord1.Letter, Coord1.Number + shipSize - 1, board))
+                    Coord2.Number = Coord1.Number + shipSize - 1;
+                else if (CellIsAvailable(Coord1.Letter, Coord1.Number - shipSize + 1, board))
+                    Coord2.Number = Coord1.Number - shipSize + 1;
                 else
-                    secondCoordLetter = firstCoordLetter - shipSize + 1;
+                    Coord2.Letter = Coord1.Letter - shipSize + 1;
 
-            } while (!CellIsAvailable(secondCoordLetter, secondCoordNumber, board));
+            } while (!CellIsAvailable(Coord2, board));
 
-            for (int row = Math.Min(firstCoordLetter, secondCoordLetter); row <= Math.Max(firstCoordLetter, secondCoordLetter); row++)
-                for (int column = Math.Min(firstCoordNumber, secondCoordNumber); column <= Math.Max(firstCoordNumber, secondCoordNumber); column++)
+            for (int row = Math.Min(Coord1.Letter, Coord2.Letter);
+                row <= Math.Max(Coord1.Letter, Coord2.Letter); row++)
+            {
+                for (int column = Math.Min(Coord1.Number, Coord2.Number);
+                    column <= Math.Max(Coord1.Number, Coord2.Number); column++)
                 {
                     Body.Add(new Part
                     {
                         ShipPart = CellContent.ship,
-                        Coord = { Letter = row, Number = column }
+                        Coord = new Coord { Letter = row, Number = column }
                     });
                 }
+            }
+
             UpdateShipOnBoard(board);
+        }
+
+        public bool CellIsAvailable(Coord coord, Board board)
+        {
+            if (OutOfBoardRange(coord))
+                return false;
+
+            for (int row = coord.Letter - 1; row <= coord.Letter + 1; row++)
+            {
+                for (int column = coord.Number - 1; column <= coord.Number + 1; column++)
+                {
+                    if (board.BoardContent[row, column] != CellContent.empty)
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        public bool OutOfBoardRange(Coord coord)
+        {
+            return coord.Letter < 1 || coord.Letter > 10 || coord.Number < 1 || coord.Number > 10;
         }
 
         public bool CellIsAvailable(int coordLetter, int coordNumber, Board board)

@@ -17,8 +17,7 @@ namespace statki
                 for (int shipQuantity = 1; shipQuantity < 6 - shipSize; shipQuantity++)
                 {
                     AskPlayerToPlaceShip(shipSize);
-                    Console.Clear();
-                    DrawBoard();
+                    RedrawBoard();
                 }
             }
         }
@@ -37,7 +36,7 @@ namespace statki
             }
         }
 
-        public void PrintCell(CellContent cell)
+        public override void PrintCell(CellContent cell)
         {
             switch (cell)
             {
@@ -62,22 +61,16 @@ namespace statki
             }
         }
 
-        public void DrawBoard()
+        public void RedrawBoard()
+        {
+            Console.Clear();
+            DrawBoard();
+        }
+
+        public override void DrawBoard()
         {
             Console.WriteLine("Twoja Plansza:");
-            char RowIndex = 'A';
-            Console.WriteLine("  1 2 3 4 5 6 7 8 9 10");
-            for (int row = 1; row < BoardSize; row++)
-            {
-                Console.Write(RowIndex);
-                RowIndex++;
-                for (int column = 1; column < BoardSize; column++)
-                {
-                    Console.Write(' ');
-                    PrintCell(BoardContent[row, column]);
-                }
-                Console.WriteLine();
-            }
+            base.DrawBoard();
         }
 
         public void EnemyShoots(Board board)
@@ -86,8 +79,7 @@ namespace statki
 
             do
             {
-                Console.Clear();
-                DrawBoard();
+                RedrawBoard();
                 hit = EnemyChooseCellToShoot(board);
 
                 if (hit && this.LostAllFleet())
@@ -108,21 +100,18 @@ namespace statki
                 {
                     case CellContent.empty:
                         BoardContent[coord.Letter, coord.Number] = CellContent.missedShot;
-                        Console.Clear();
-                        DrawBoard();
+                        RedrawBoard();
                         Console.Write("Pudło!");
                         return false;
                     case CellContent.ship:
                         if (CheckIfShootSinkTheShip(board, coord))
                         {
-                            Console.Clear();
-                            DrawBoard();
+                            RedrawBoard();
                             Console.Write("Trafiony zatopiony! Przeciwnik może strzelić jeszcze raz.");
                         }
                         else
                         {
-                            Console.Clear();
-                            DrawBoard();
+                            RedrawBoard();
                             Console.Write("Trafiony! Przeciwnik może strzelić jeszcze raz.");
                         }
                         return true;

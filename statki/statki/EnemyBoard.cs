@@ -21,7 +21,7 @@ namespace statki
             }
         }
 
-        public void PrintCell(CellContent cell)
+        public override void PrintCell(CellContent cell)
         {
             switch (cell)
             {
@@ -46,22 +46,10 @@ namespace statki
             }
         }
 
-        public void DrawBoard()
+        public override void DrawBoard()
         {
             Console.WriteLine("Plansza Przeciwnika:");
-            char RowIndex = 'A';
-            Console.WriteLine("  1 2 3 4 5 6 7 8 9 10");
-            for (int row = 1; row < BoardSize; row++)
-            {
-                Console.Write(RowIndex);
-                RowIndex++;
-                for (int column = 1; column < BoardSize; column++)
-                {
-                    Console.Write(' ');
-                    PrintCell(BoardContent[row, column]);
-                }
-                Console.WriteLine();
-            }
+            base.DrawBoard();
         }
 
         public void ShootEnemy(Board board)
@@ -88,7 +76,7 @@ namespace statki
                 Console.Write("Podaj prawidłową współrzędna do strzału: ");
                 userInput = Console.ReadLine().ToUpper();
             }
-            while (Coord.IsCoordCorrect(userInput));
+            while (!Coord.IsCoordCorrect(userInput));
 
             return DidShotHit(new Coord(userInput), board);
         }
